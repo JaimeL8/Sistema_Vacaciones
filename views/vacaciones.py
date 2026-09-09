@@ -183,7 +183,7 @@ class VacacionesView(QWidget):
             """)
             return
 
-        # Si el rango es correcto, habilitamos el botón de guardar de nuevo
+        # Si el rango es correcto, se habilita el botón de guardar de nuevo
         self.btn_guardar.setEnabled(True)
         self.btn_guardar.setStyleSheet("""
             QPushButton {

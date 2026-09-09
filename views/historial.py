@@ -1,14 +1,111 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
+                             QComboBox, QTableWidget, QTableWidgetItem, 
+                             QHeaderView, QFrame)
 from PyQt6.QtCore import Qt
 
 class HistorialView(QWidget):
     def __init__(self):
         super().__init__()
-        layout = QVBoxLayout(self)
         
-        titulo = QLabel("Módulo de Historial y Expediente")
-        titulo.setStyleSheet("font-size: 24px; font-weight: bold; color: #333;")
-        titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout_principal = QVBoxLayout(self)
+        layout_principal.setContentsMargins(30, 30, 30, 30)
+        layout_principal.setSpacing(20)
+
+        # Título del Módulo
+        lbl_titulo = QLabel("Historial y Expediente de Vacaciones")
+        lbl_titulo.setStyleSheet("font-size: 22px; font-weight: bold; color: #2c3e50;")
+        layout_principal.addWidget(lbl_titulo)
+
+        # ==========================================
+        # SECCIÓN 1: Selector de Empleado
+        # ==========================================
+        frame_selector = QFrame()
+        frame_selector.setStyleSheet("background-color: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;")
+        layout_selector = QHBoxLayout(frame_selector)
         
-        # Aquí irá la bitácora completa por empleado
-        layout.addWidget(titulo)
+        lbl_empleado = QLabel("👤 Seleccionar Empleado:")
+        lbl_empleado.setStyleSheet("font-size: 14px; font-weight: bold; border: none;")
+        
+        self.combo_empleados = QComboBox()
+        self.combo_empleados.setStyleSheet("padding: 5px; font-size: 14px; background-color: white; border: 1px solid #ccc; border-radius: 4px;")
+        self.combo_empleados.setMinimumWidth(350)
+        # Mockup de datos (posteriormente se poblará dinámicamente desde Supabase)
+        self.combo_empleados.addItems([
+            "-- Seleccione un empleado para ver su expediente --", 
+            "Juan Pérez López", 
+            "Ana García Méndez", 
+            "Carlos Ruiz"
+        ])
+        
+        layout_selector.addWidget(lbl_empleado)
+        layout_selector.addWidget(self.combo_empleados)
+        layout_selector.addStretch()
+
+        # Conectar evento de selección
+        self.combo_empleados.currentIndexChanged.connect(self.cargar_historial_empleado)
+
+        # ==========================================
+        # SECCIÓN 2: Bitácora Detallada (Tabla)
+        # ==========================================
+        frame_bitacora = QFrame()
+        frame_bitacora.setStyleSheet("background-color: white; border-radius: 8px; border: 1px solid #dee2e6;")
+        layout_bitacora = QVBoxLayout(frame_bitacora)
+        layout_bitacora.setContentsMargins(20, 20, 20, 20)
+
+        self.lbl_info_empleado = QLabel("Seleccione un empleado arriba para consultar su expediente histórico completo.")
+        self.lbl_info_empleado.setStyleSheet("font-size: 14px; color: #7f8c8d; font-weight: bold; border: none;")
+        
+        # Tabla de Historial (Bloques de vacaciones)
+        self.tabla_historial = QTableWidget()
+        self.tabla_historial.setColumnCount(6)
+        self.tabla_historial.setHorizontalHeaderLabels([
+            "Periodo LFT", "Fecha Inicio", "Fecha Fin", 
+            "Días Descontados", "Fecha Registro", "Observaciones"
+        ])
+        
+        header = self.tabla_historial.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)
+        
+        self.tabla_historial.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.tabla_historial.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+
+        layout_bitacora.addWidget(self.lbl_info_empleado)
+        layout_bitacora.addWidget(self.tabla_historial)
+
+        # Agregar todo al layout principal
+        layout_principal.addWidget(frame_selector)
+        layout_principal.addWidget(frame_bitacora)
+
+    # --- LÓGICA DE LA VISTA ---
+
+    def cargar_historial_empleado(self):
+        """Carga los bloques históricos de vacaciones vinculados al empleado"""
+        index = self.combo_empleados.currentIndex()
+        if index == 0:
+            self.lbl_info_empleado.setText("Seleccione un empleado arriba para consultar su expediente histórico completo.")
+            self.tabla_historial.setRowCount(0)
+            return
+
+        nombre = self.combo_historial_nombre = self.combo_empleados.currentText()
+        self.lbl_info_empleado.setText(f"Expediente Histórico de: {nombre} | Fecha de Ingreso: 15/03/2022")
+
+        # Mockup de datos que simulan registros de la tabla 'vacaciones' (incluyendo el 'periodo_anual')
+        # Formato: (Periodo LFT, Inicio, Fin, Días, Registro, Observaciones)
+        datos_mock = [
+            ("Año 1", "10/04/2023", "15/04/2023", "5", "01/04/2023", "Vacaciones de primavera"),
+            ("Año 1", "20/12/2023", "22/12/2023", "3", "10/12/2023", "Días decembrinos a cuenta de ley"),
+            ("Año 2", "12/05/2024", "19/05/2024", "6", "02/05/2024", "Periodo vacacional anual"),
+            ("Año 3", "10/08/2025", "15/08/2025", "5", "01/08/2025", "Asuntos personales")
+        ]
+
+        self.tabla_historial.setRowCount(len(datos_mock))
+        for fila, datos in enumerate(datos_mock):
+            for columna, texto in enumerate(datos):
+                item = QTableWidgetItem(texto)
+                item.setTextAlignment(Qt.AlignmentFlag.AlignCenter if columna < 5 else Qt.AlignmentFlag.AlignLeft)
+                self.tabla_historial.setItem(fila, columna, item)

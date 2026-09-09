@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget,
                              QHBoxLayout, QVBoxLayout, QPushButton, 
                              QStackedWidget, QFrame)
 
-# Importamos las 6 vistas
+# Importar las 6 vistas
 from views.dashboard import DashboardView
 from views.empleados import EmpleadosView
 from views.vacaciones import VacacionesView
@@ -60,18 +60,21 @@ class MainWindow(QMainWindow):
             
         sidebar.addStretch()
 
-        # --- ÁREA CENTRAL (VISTAS DINÁMICAS) ---
+       # --- ÁREA CENTRAL (VISTAS DINÁMICAS) ---
         self.stacked_widget = QStackedWidget()
         
-        # Instanciar e insertar las vistas (Índices 0 al 5)
-        self.stacked_widget.addWidget(DashboardView())      # Índice 0
+        # 1. Guardamos el Dashboard en una variable para poder acceder a su botón
+        self.vista_dashboard = DashboardView()
+        
+        # 2. Instanciar e insertar las vistas (Índices 0 al 5)
+        self.stacked_widget.addWidget(self.vista_dashboard) # Índice 0
         self.stacked_widget.addWidget(EmpleadosView())      # Índice 1
         self.stacked_widget.addWidget(VacacionesView())     # Índice 2
         self.stacked_widget.addWidget(HistorialView())      # Índice 3
         self.stacked_widget.addWidget(ReportesView())       # Índice 4
         self.stacked_widget.addWidget(ConfiguracionView())  # Índice 5
 
-        # Conectar los clics con el cambio de pantalla correspondiente
+        # 3. Conectar los clics del menú lateral con el cambio de pantalla
         self.btn_dashboard.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
         self.btn_empleados.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
         self.btn_vacaciones.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
@@ -79,6 +82,8 @@ class MainWindow(QMainWindow):
         self.btn_reportes.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(4))
         self.btn_config.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(5))
 
+        # 4. NUEVA CONEXIÓN: Botón verde del Dashboard -> Módulo de Vacaciones (Índice 2)
+        self.vista_dashboard.btn_acceso_rapido.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
         # Armar el layout principal
         layout_principal.addWidget(sidebar_frame)
         layout_principal.addWidget(self.stacked_widget)

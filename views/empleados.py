@@ -159,14 +159,14 @@ class EmpleadosView(QWidget):
         nombre = self.tabla_empleados.item(fila, 0).text()
         depto = self.tabla_empleados.item(fila, 1).text()
         
-        # Aquí es donde, en el futuro, buscaremos la fecha_ingreso en Supabase
-        # y ejecutaremos la fórmula matemática para calcular días.
-        # Por ahora, actualizamos la interfaz con datos de ejemplo:
+        # Aquí es donde, en el futuro, se buscará la fecha_ingreso en Supabase
+        # y se ejecutará la fórmula matemática para calcular días.
+        # Por ahora, se actualiza la interfaz con datos de ejemplo:
         self.lbl_nombre.setText(nombre)
         self.lbl_depto.setText(f"Departamento: {depto}")
         self.lbl_ingreso.setText("Fecha de Ingreso: 15/03/2022")
         self.lbl_antiguedad.setText("Antigüedad: 4 años")
         
-        # Actualizamos las tarjetas buscando específicamente el texto llamado "valor_numero"
+        # Se actualizan las tarjetas buscando específicamente el texto llamado "valor_numero"
         self.caja_dias_ley.findChild(QLabel, "valor_numero").setText("18") 
         self.caja_dias_disp.findChild(QLabel, "valor_numero").setText("12")
