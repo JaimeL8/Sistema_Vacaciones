@@ -44,7 +44,7 @@ class ConfiguracionView(QWidget):
         self.tab_lft = QWidget()
         self.configurar_tab_lft()
 
-        # Agregamos los íconos (calendario y balanza legal) directamente a la pestaña
+        # Aquí se aregab los íconos (calendario y balanza legal) directamente a la pestaña
         tabs.addTab(self.tab_festivos, qta.icon('fa5s.calendar-alt', color='#7f8c8d'), " Calendario de Días Festivos")
         tabs.addTab(self.tab_lft, qta.icon('fa5s.balance-scale', color='#7f8c8d'), " Parámetros de la LFT")
 
@@ -88,6 +88,30 @@ class ConfiguracionView(QWidget):
 
         # Lado Derecho: Tabla de Festivos Registrados
         layout_der = QVBoxLayout()
+
+        # --- ESTILO MODERNO PARA LAS TABLAS ---
+        self.estilo_tabla = """
+            QTableWidget {
+                border: 1px solid #dee2e6;
+                gridline-color: #dcdde1;
+                font-size: 13px;
+                color: #2f3640;
+                border-radius: 5px;
+                background-color: white;
+            }
+            QHeaderView::section {
+                background-color: #f5f6fa;
+                color: #2c3e50;
+                font-weight: bold;
+                border: none;
+                border-bottom: 2px solid #bdc3c7;
+                padding: 8px;
+            }
+            QTableWidget::item {
+                padding: 5px;
+            }
+        """
+
         self.tabla_festivos = QTableWidget()
         self.tabla_festivos.setColumnCount(2)
         self.tabla_festivos.setHorizontalHeaderLabels(["Fecha Exacta", "Festividad Oficial"])
@@ -95,6 +119,10 @@ class ConfiguracionView(QWidget):
         self.tabla_festivos.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
         self.tabla_festivos.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.tabla_festivos.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+
+        self.tabla_festivos.setStyleSheet(self.estilo_tabla)
+        self.tabla_festivos.verticalHeader().setVisible(False) # Oculta los números 1, 2, 3...
+        self.tabla_festivos.setAlternatingRowColors(True) # Filas tipo cebra
 
         self.btn_eliminar_festivo = QPushButton(" Eliminar Seleccionado")
         self.btn_eliminar_festivo.setIcon(qta.icon('fa5s.trash-alt', color='white'))
@@ -133,13 +161,17 @@ class ConfiguracionView(QWidget):
         self.tabla_lft.setHorizontalHeaderLabels(["Años de Antigüedad", "Días de Vacaciones Otorgados"])
         self.tabla_lft.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         # Aquí SÍ se permite edición para que el administrador pueda cambiar los números
+
+        self.tabla_lft.setStyleSheet(self.estilo_tabla)
+        self.tabla_lft.verticalHeader().setVisible(False)
+        self.tabla_lft.setAlternatingRowColors(True)
         
         self.btn_guardar_lft = QPushButton(" Guardar Nueva Configuración")
         self.btn_guardar_lft.setIcon(qta.icon('fa5s.save', color='white'))
         self.btn_guardar_lft.setStyleSheet("background-color: #2980b9; color: white; padding: 12px; font-weight: bold; font-size: 14px; border-radius: 5px;")
         
         layout.addWidget(lbl_info)
-        layout.addLayout(layout_aviso) # <--- Cambiamos addWidget por addLayout aquí
+        layout.addLayout(layout_aviso) 
         layout.addWidget(self.tabla_lft)
         layout.addWidget(self.btn_guardar_lft, alignment=Qt.AlignmentFlag.AlignRight)
 
@@ -170,7 +202,7 @@ class ConfiguracionView(QWidget):
         self.tabla_lft.setRowCount(len(datos))
         for fila, (anio, dias) in enumerate(datos):
             item_a = QTableWidgetItem(anio)
-            item_a.setFlags(item_a.flags() & ~Qt.ItemFlag.ItemIsEditable) # El año no se edita
+            item_a.setFlags(item_a.flags() & ~Qt.ItemFlag.ItemIsEditable) # El año no se puede editar
             item_a.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             
             item_d = QTableWidgetItem(dias)

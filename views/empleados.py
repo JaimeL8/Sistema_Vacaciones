@@ -28,6 +28,28 @@ class EmpleadosView(QWidget):
         self.search_bar.setPlaceholderText("Buscar empleado por nombre o departamento...")
         self.search_bar.setStyleSheet("padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;")
 
+        estilo_tabla = """
+            QTableWidget {
+                border: 1px solid #dee2e6;
+                gridline-color: #dcdde1;
+                font-size: 13px;
+                color: #2f3640;
+                border-radius: 5px;
+                background-color: white;
+            }
+            QHeaderView::section {
+                background-color: #f5f6fa;
+                color: #2c3e50;
+                font-weight: bold;
+                border: none;
+                border-bottom: 2px solid #bdc3c7;
+                padding: 8px;
+            }
+            QTableWidget::item {
+                padding: 5px;
+            }
+        """
+
         # 2. Tabla de Empleados
         self.tabla_empleados = QTableWidget()
         self.tabla_empleados.setColumnCount(3)
@@ -38,6 +60,10 @@ class EmpleadosView(QWidget):
         self.tabla_empleados.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
         self.tabla_empleados.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows) # Seleccionar fila completa
         self.tabla_empleados.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers) # Solo lectura
+
+        self.tabla_empleados.setStyleSheet(estilo_tabla)
+        self.tabla_empleados.verticalHeader().setVisible(False) # Oculta la columna de números
+        self.tabla_empleados.setAlternatingRowColors(True) # Activa el diseño de filas "cebra"
 
         # Conectar el clic en la tabla a la función de resumen
         self.tabla_empleados.itemSelectionChanged.connect(self.mostrar_resumen_empleado)

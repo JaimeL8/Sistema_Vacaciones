@@ -74,32 +74,96 @@ class VacacionesView(QWidget):
         self.combo_empleados.currentIndexChanged.connect(self.actualizar_saldo)
 
         # ==========================================
-        # SECCIÓN 2: Selección de Fechas
+        # SECCIÓN 2: Selección de Fechas 
         # ==========================================
         frame_fechas = QFrame()
         frame_fechas.setStyleSheet("background-color: white; border-radius: 8px; border: 1px solid #dee2e6;")
-        layout_fechas = QFormLayout(frame_fechas)
-        layout_fechas.setContentsMargins(20, 20, 20, 20)
-        layout_fechas.setSpacing(15)
+        layout_fechas = QVBoxLayout(frame_fechas)
+        layout_fechas.setContentsMargins(25, 25, 25, 25)
+        layout_fechas.setSpacing(20)
 
-        estilo_fecha = "padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;"
+        # 1. Contenedor superior para el Checkbox e Ícono separados
+        layout_top_fechas = QHBoxLayout()
+        layout_top_fechas.setSpacing(8)
+        
+        ico_calendario = QLabel()
+        ico_calendario.setPixmap(qta.icon('fa5s.calendar-day', color='#34495e').pixmap(18, 18))
+        ico_calendario.setStyleSheet("border: none;")
+        
+        self.check_un_dia = QCheckBox("Es solo un día")
+        self.check_un_dia.setStyleSheet("""
+            QCheckBox { 
+                font-size: 14px; 
+                font-weight: bold; 
+                color: #34495e; 
+                border: none;
+            }
+        """)
+        
+        layout_top_fechas.addWidget(ico_calendario)
+        layout_top_fechas.addWidget(self.check_un_dia)
+        layout_top_fechas.addStretch()
 
+        # 2. Contenedor para las cajas de fecha (Lado a lado)
+        layout_inputs = QHBoxLayout()
+        layout_inputs.setSpacing(30)
+
+        estilo_fecha = """
+            QDateEdit {
+                padding: 8px 15px; 
+                font-size: 14px; 
+                color: #2c3e50;
+                background-color: #f8f9fa;
+                border: 1px solid #ced4da; 
+                border-radius: 6px;
+            }
+            QDateEdit:focus {
+                border: 1px solid #3498db;
+                background-color: white;
+            }
+            QDateEdit:disabled {
+                background-color: #e9ecef;
+                color: #a6b0b8;
+                border: 1px solid #e9ecef;
+            }
+        """
+
+        # Bloque Fecha de Inicio
+        layout_inicio = QVBoxLayout()
+        lbl_inicio = QLabel("Fecha de Inicio")
+        lbl_inicio.setStyleSheet("font-size: 13px; font-weight: bold; color: #7f8c8d; border: none; margin-bottom: 2px;")
+        
         self.date_inicio = QDateEdit()
-        self.date_inicio.setCalendarPopup(True) # Muestra un calendario al hacer clic
+        self.date_inicio.setCalendarPopup(True)
         self.date_inicio.setDate(QDate.currentDate())
+        self.date_inicio.setMinimumWidth(220)
         self.date_inicio.setStyleSheet(estilo_fecha)
+        
+        layout_inicio.addWidget(lbl_inicio)
+        layout_inicio.addWidget(self.date_inicio)
 
+        # Bloque Fecha de Fin
+        layout_fin = QVBoxLayout()
+        lbl_fin = QLabel("Fecha de Fin")
+        lbl_fin.setStyleSheet("font-size: 13px; font-weight: bold; color: #7f8c8d; border: none; margin-bottom: 2px;")
+        
         self.date_fin = QDateEdit()
         self.date_fin.setCalendarPopup(True)
         self.date_fin.setDate(QDate.currentDate())
+        self.date_fin.setMinimumWidth(220)
         self.date_fin.setStyleSheet(estilo_fecha)
-
-        self.check_un_dia = QCheckBox("Es solo un día")
-        self.check_un_dia.setStyleSheet("font-size: 13px; font-weight: bold; color: #34495e; border: none;")
         
-        layout_fechas.addRow(QLabel(""), self.check_un_dia)
-        layout_fechas.addRow(QLabel("Fecha de Inicio:"), self.date_inicio)
-        layout_fechas.addRow(QLabel("Fecha de Fin:"), self.date_fin)
+        layout_fin.addWidget(lbl_fin)
+        layout_fin.addWidget(self.date_fin)
+
+        # Ensamblar los campos lado a lado
+        layout_inputs.addLayout(layout_inicio)
+        layout_inputs.addLayout(layout_fin)
+        layout_inputs.addStretch()
+
+        # Agregar todo al marco principal de fechas
+        layout_fechas.addLayout(layout_top_fechas)
+        layout_fechas.addLayout(layout_inputs)
 
         # Eventos de fechas
         self.check_un_dia.toggled.connect(self.toggle_un_dia)

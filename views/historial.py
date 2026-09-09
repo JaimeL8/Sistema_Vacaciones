@@ -59,7 +59,8 @@ class HistorialView(QWidget):
 
         # ==========================================
         # SECCIÓN 2: Bitácora Detallada (Tabla)
-        # ==========================================
+        # ==========================================´
+        
         frame_bitacora = QFrame()
         frame_bitacora.setStyleSheet("background-color: white; border-radius: 8px; border: 1px solid #dee2e6;")
         layout_bitacora = QVBoxLayout(frame_bitacora)
@@ -67,6 +68,29 @@ class HistorialView(QWidget):
 
         self.lbl_info_empleado = QLabel("Seleccione un empleado arriba para consultar su expediente histórico completo.")
         self.lbl_info_empleado.setStyleSheet("font-size: 14px; color: #7f8c8d; font-weight: bold; border: none;")
+
+        # --- ESTILO MODERNO PARA LA TABLA ---
+        estilo_tabla = """
+            QTableWidget {
+                border: 1px solid #dee2e6;
+                gridline-color: #dcdde1;
+                font-size: 13px;
+                color: #2f3640;
+                border-radius: 5px;
+                background-color: white;
+            }
+            QHeaderView::section {
+                background-color: #f5f6fa;
+                color: #2c3e50;
+                font-weight: bold;
+                border: none;
+                border-bottom: 2px solid #bdc3c7;
+                padding: 8px;
+            }
+            QTableWidget::item {
+                padding: 5px;
+            }
+        """  
         
         # Tabla de Historial (Bloques de vacaciones)
         self.tabla_historial = QTableWidget()
@@ -86,6 +110,12 @@ class HistorialView(QWidget):
         
         self.tabla_historial.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self.tabla_historial.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+
+        # --- NUEVAS LÍNEAS DE DISEÑO APLICADAS ---
+        self.tabla_historial.setStyleSheet(estilo_tabla)
+        self.tabla_historial.verticalHeader().setVisible(False) # Oculta la columna de números
+        self.tabla_historial.setAlternatingRowColors(True) # Filas tipo cebra
+        # -----------------------------------------
 
         layout_bitacora.addWidget(self.lbl_info_empleado)
         layout_bitacora.addWidget(self.tabla_historial)

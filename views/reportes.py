@@ -103,15 +103,44 @@ class ReportesView(QWidget):
         # ==========================================
         # SECCIÓN 2: Previsualización de Datos
         # ==========================================
+
+        # --- ESTILO MODERNO PARA LA TABLA ---
+        estilo_tabla = """
+            QTableWidget {
+                border: 1px solid #dee2e6;
+                gridline-color: #dcdde1;
+                font-size: 13px;
+                color: #2f3640;
+                border-radius: 5px;
+                background-color: white;
+            }
+            QHeaderView::section {
+                background-color: #f5f6fa;
+                color: #2c3e50;
+                font-weight: bold;
+                border: none;
+                border-bottom: 2px solid #bdc3c7;
+                padding: 8px;
+            }
+            QTableWidget::item {
+                padding: 5px;
+            }
+        """
+
         self.tabla_preview = QTableWidget()
         self.tabla_preview.setColumnCount(4)
         self.tabla_preview.setHorizontalHeaderLabels(["Empleado", "Departamento", "Días", "Detalle"])
         self.tabla_preview.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.tabla_preview.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
+        self.tabla_preview.setStyleSheet(estilo_tabla)
+        self.tabla_preview.verticalHeader().setVisible(False) # Oculta la columna de números
+        self.tabla_preview.setAlternatingRowColors(True) # Activa las filas tipo cebra
+
         # ==========================================
         # SECCIÓN 3: Exportación
         # ==========================================
+        
         layout_exportar = QHBoxLayout()
         
         self.btn_excel = QPushButton(" Exportar a Excel")

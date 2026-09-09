@@ -60,6 +60,27 @@ class DashboardView(QWidget):
         layout_tablas = QHBoxLayout()
         layout_tablas.setSpacing(20)
 
+        # --- ESTILO MODERNO PARA LAS TABLAS ---
+        estilo_tabla = """
+            QTableWidget {
+                border: none;
+                gridline-color: #dcdde1;
+                font-size: 13px;
+                color: #2f3640;
+            }
+            QHeaderView::section {
+                background-color: #f5f6fa;
+                color: #2c3e50;
+                font-weight: bold;
+                border: none;
+                border-bottom: 2px solid #bdc3c7;
+                padding: 8px;
+            }
+            QTableWidget::item {
+                padding: 5px;
+            }
+        """
+
         # Tabla 1: Ausencias Actuales
         frame_ausencias = QFrame()
         frame_ausencias.setStyleSheet("background-color: white; border-radius: 8px; border: 1px solid #dee2e6;")
@@ -78,13 +99,17 @@ class DashboardView(QWidget):
         layout_tit_aus.addWidget(lbl_ausencias)
         layout_tit_aus.addStretch()
         
-        layout_ausencias.addLayout(layout_tit_aus) # Agregamos el contenedor del título
+        layout_ausencias.addLayout(layout_tit_aus) # Se agrega el contenedor dle titulo
 
         self.tabla_ausencias = QTableWidget()
         self.tabla_ausencias.setColumnCount(3)
         self.tabla_ausencias.setHorizontalHeaderLabels(["Empleado", "Depto.", "Regresa el"])
         self.tabla_ausencias.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.tabla_ausencias.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+
+        self.tabla_ausencias.setStyleSheet(estilo_tabla)
+        self.tabla_ausencias.verticalHeader().setVisible(False) # Para ocultar los número 1, 2, 3, ...
+        self.tabla_ausencias.setAlternatingRowColors(True) # Filas cebra
 
         layout_ausencias.addWidget(lbl_ausencias)
         layout_ausencias.addWidget(self.tabla_ausencias)
@@ -109,12 +134,16 @@ class DashboardView(QWidget):
         layout_tit_pasivos.addStretch()
         
         layout_pasivos.addLayout(layout_tit_pasivos)
-        
+
         self.tabla_pasivos = QTableWidget()
         self.tabla_pasivos.setColumnCount(3)
         self.tabla_pasivos.setHorizontalHeaderLabels(["Empleado", "Días Libres", "Caducidad Próxima"])
         self.tabla_pasivos.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.tabla_pasivos.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+
+        self.tabla_pasivos.setStyleSheet(estilo_tabla)
+        self.tabla_pasivos.verticalHeader().setVisible(False)
+        self.tabla_pasivos.setAlternatingRowColors(True)
 
         layout_pasivos.addWidget(lbl_pasivos)
         layout_pasivos.addWidget(self.tabla_pasivos)
