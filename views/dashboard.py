@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QPushButton, QFrame, QTableWidget, QTableWidgetItem, 
                              QHeaderView, QGridLayout)
 from PyQt6.QtCore import Qt
+import qtawesome as qta
 
 class DashboardView(QWidget):
     def __init__(self):
@@ -25,7 +26,8 @@ class DashboardView(QWidget):
         layout_titulos.addWidget(lbl_titulo)
         layout_titulos.addWidget(lbl_subtitulo)
         
-        self.btn_acceso_rapido = QPushButton("🌴 Registrar Nueva Vacación")
+        self.btn_acceso_rapido = QPushButton(" Registrar Nueva Vacación")
+        self.btn_acceso_rapido.setIcon(qta.icon('fa5s.umbrella-beach', color='white'))
         self.btn_acceso_rapido.setStyleSheet("""
             QPushButton {
                 background-color: #27ae60; color: white; padding: 12px 20px; 
@@ -62,10 +64,22 @@ class DashboardView(QWidget):
         frame_ausencias = QFrame()
         frame_ausencias.setStyleSheet("background-color: white; border-radius: 8px; border: 1px solid #dee2e6;")
         layout_ausencias = QVBoxLayout(frame_ausencias)
+
+        layout_tit_aus = QHBoxLayout()
+        layout_tit_aus.setSpacing(8)
+        ico_aus = QLabel()
+        ico_aus.setPixmap(qta.icon('fa5s.calendar-alt', color='#34495e').pixmap(18, 18))
+        ico_aus.setStyleSheet("border: none;")
+
+        lbl_ausencias = QLabel("Ausencias de este mes")
+        lbl_ausencias.setStyleSheet("font-size: 16px; font-weight: bold; color: #34495e; border: none;")
+
+        layout_tit_aus.addWidget(ico_aus)
+        layout_tit_aus.addWidget(lbl_ausencias)
+        layout_tit_aus.addStretch()
         
-        lbl_ausencias = QLabel("📅 Ausencias de este mes")
-        lbl_ausencias.setStyleSheet("font-size: 16px; font-weight: bold; color: #34495e; border: none; padding-bottom: 5px;")
-        
+        layout_ausencias.addLayout(layout_tit_aus) # Agregamos el contenedor del título
+
         self.tabla_ausencias = QTableWidget()
         self.tabla_ausencias.setColumnCount(3)
         self.tabla_ausencias.setHorizontalHeaderLabels(["Empleado", "Depto.", "Regresa el"])
@@ -79,9 +93,22 @@ class DashboardView(QWidget):
         frame_pasivos = QFrame()
         frame_pasivos.setStyleSheet("background-color: #fff3f3; border-radius: 8px; border: 1px solid #f5b7b1;")
         layout_pasivos = QVBoxLayout(frame_pasivos)
+
+        # --- Nuevo título con ícono para Pasivos ---
+        layout_tit_pasivos = QHBoxLayout()
+        layout_tit_pasivos.setSpacing(8)
+        ico_pasivos = QLabel()
+        ico_pasivos.setPixmap(qta.icon('fa5s.exclamation-triangle', color='#c0392b').pixmap(18, 18))
+        ico_pasivos.setStyleSheet("border: none; background-color: transparent;")
         
-        lbl_pasivos = QLabel("⚠️ Riesgo de Pasivos (Días acumulados)")
-        lbl_pasivos.setStyleSheet("font-size: 16px; font-weight: bold; color: #c0392b; border: none; padding-bottom: 5px;")
+        lbl_pasivos = QLabel("Riesgo de Pasivos (Días acumulados)")
+        lbl_pasivos.setStyleSheet("font-size: 16px; font-weight: bold; color: #c0392b; border: none; background-color: transparent;")
+        
+        layout_tit_pasivos.addWidget(ico_pasivos)
+        layout_tit_pasivos.addWidget(lbl_pasivos)
+        layout_tit_pasivos.addStretch()
+        
+        layout_pasivos.addLayout(layout_tit_pasivos)
         
         self.tabla_pasivos = QTableWidget()
         self.tabla_pasivos.setColumnCount(3)

@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QPushButton, QFrame, QTableWidget, QTableWidgetItem, 
                              QHeaderView, QTabWidget, QLineEdit, QDateEdit, QFormLayout)
 from PyQt6.QtCore import Qt, QDate
+import qtawesome as qta
 
 class ConfiguracionView(QWidget):
     def __init__(self):
@@ -43,8 +44,9 @@ class ConfiguracionView(QWidget):
         self.tab_lft = QWidget()
         self.configurar_tab_lft()
 
-        tabs.addTab(self.tab_festivos, "📅 Calendario de Días Festivos")
-        tabs.addTab(self.tab_lft, "⚖️ Parámetros de la LFT")
+        # Agregamos los íconos (calendario y balanza legal) directamente a la pestaña
+        tabs.addTab(self.tab_festivos, qta.icon('fa5s.calendar-alt', color='#7f8c8d'), " Calendario de Días Festivos")
+        tabs.addTab(self.tab_lft, qta.icon('fa5s.balance-scale', color='#7f8c8d'), " Parámetros de la LFT")
 
         layout_principal.addWidget(tabs)
 
@@ -76,7 +78,8 @@ class ConfiguracionView(QWidget):
         form.addRow("Fecha:", self.date_festivo)
         form.addRow("Descripción:", self.txt_descripcion)
 
-        self.btn_agregar_festivo = QPushButton("➕ Agregar al Calendario")
+        self.btn_agregar_festivo = QPushButton(" Agregar al Calendario")
+        self.btn_agregar_festivo.setIcon(qta.icon('fa5s.plus', color='white'))
         self.btn_agregar_festivo.setStyleSheet("background-color: #27ae60; color: white; padding: 10px; font-weight: bold; border-radius: 5px; margin-top: 10px;")
 
         layout_form.addWidget(lbl_instruccion)
@@ -93,7 +96,8 @@ class ConfiguracionView(QWidget):
         self.tabla_festivos.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.tabla_festivos.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
-        self.btn_eliminar_festivo = QPushButton("🗑️ Eliminar Seleccionado")
+        self.btn_eliminar_festivo = QPushButton(" Eliminar Seleccionado")
+        self.btn_eliminar_festivo.setIcon(qta.icon('fa5s.trash-alt', color='white'))
         self.btn_eliminar_festivo.setStyleSheet("background-color: #e74c3c; color: white; padding: 8px; font-weight: bold; border-radius: 5px;")
         
         layout_der.addWidget(self.tabla_festivos)
@@ -112,8 +116,17 @@ class ConfiguracionView(QWidget):
         lbl_info = QLabel("Tabla Oficial de Asignación de Vacaciones (Ley Federal del Trabajo)")
         lbl_info.setStyleSheet("font-size: 16px; font-weight: bold; color: #34495e; margin-bottom: 10px;")
         
-        lbl_aviso = QLabel("⚠️ Modifique estos valores únicamente si ocurre una reforma constitucional.")
-        lbl_aviso.setStyleSheet("font-size: 13px; color: #e67e22; font-weight: bold; margin-bottom: 15px;")
+        # --- Etiqueta con ícono de advertencia ---
+        layout_aviso = QHBoxLayout()
+        ico_aviso = QLabel()
+        ico_aviso.setPixmap(qta.icon('fa5s.exclamation-triangle', color='#e67e22').pixmap(16, 16))
+        
+        lbl_aviso = QLabel("Modifique estos valores únicamente si ocurre una reforma constitucional.")
+        lbl_aviso.setStyleSheet("font-size: 13px; color: #e67e22; font-weight: bold;")
+        
+        layout_aviso.addWidget(ico_aviso)
+        layout_aviso.addWidget(lbl_aviso)
+        layout_aviso.addStretch()
 
         self.tabla_lft = QTableWidget()
         self.tabla_lft.setColumnCount(2)
@@ -121,11 +134,12 @@ class ConfiguracionView(QWidget):
         self.tabla_lft.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         # Aquí SÍ se permite edición para que el administrador pueda cambiar los números
         
-        self.btn_guardar_lft = QPushButton("💾 Guardar Nueva Configuración")
+        self.btn_guardar_lft = QPushButton(" Guardar Nueva Configuración")
+        self.btn_guardar_lft.setIcon(qta.icon('fa5s.save', color='white'))
         self.btn_guardar_lft.setStyleSheet("background-color: #2980b9; color: white; padding: 12px; font-weight: bold; font-size: 14px; border-radius: 5px;")
         
         layout.addWidget(lbl_info)
-        layout.addWidget(lbl_aviso)
+        layout.addLayout(layout_aviso) # <--- Cambiamos addWidget por addLayout aquí
         layout.addWidget(self.tabla_lft)
         layout.addWidget(self.btn_guardar_lft, alignment=Qt.AlignmentFlag.AlignRight)
 

@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QComboBox, QTableWidget, QTableWidgetItem, 
                              QHeaderView, QFrame)
 from PyQt6.QtCore import Qt
+import qtawesome as qta
 
 class HistorialView(QWidget):
     def __init__(self):
@@ -23,8 +24,20 @@ class HistorialView(QWidget):
         frame_selector.setStyleSheet("background-color: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;")
         layout_selector = QHBoxLayout(frame_selector)
         
-        lbl_empleado = QLabel("👤 Seleccionar Empleado:")
-        lbl_empleado.setStyleSheet("font-size: 14px; font-weight: bold; border: none;")
+        # Contenedor horizontal para juntar el ícono y el texto
+        layout_lbl_empleado = QHBoxLayout()
+        layout_lbl_empleado.setSpacing(5)
+        
+        lbl_icono = QLabel()
+        # Convertimos el ícono vectorial en una imagen de 18x18 píxeles
+        lbl_icono.setPixmap(qta.icon('fa5s.user', color='#2c3e50').pixmap(18, 18))
+        lbl_icono.setStyleSheet("border: none;")
+        
+        lbl_empleado = QLabel("Seleccionar Empleado:")
+        lbl_empleado.setStyleSheet("font-size: 14px; font-weight: bold; color: #2c3e50; border: none;")
+        
+        layout_lbl_empleado.addWidget(lbl_icono)
+        layout_lbl_empleado.addWidget(lbl_empleado)
         
         self.combo_empleados = QComboBox()
         self.combo_empleados.setStyleSheet("padding: 5px; font-size: 14px; background-color: white; border: 1px solid #ccc; border-radius: 4px;")
@@ -37,7 +50,7 @@ class HistorialView(QWidget):
             "Carlos Ruiz"
         ])
         
-        layout_selector.addWidget(lbl_empleado)
+        layout_selector.addLayout(layout_lbl_empleado)
         layout_selector.addWidget(self.combo_empleados)
         layout_selector.addStretch()
 

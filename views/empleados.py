@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QLineEdit, QPushButton, QTableWidget, 
                              QTableWidgetItem, QHeaderView, QFrame, QGridLayout)
 from PyQt6.QtCore import Qt
+import qtawesome as qta
 
 class EmpleadosView(QWidget):
     def __init__(self):
@@ -24,7 +25,7 @@ class EmpleadosView(QWidget):
         lbl_titulo.setStyleSheet("font-size: 20px; font-weight: bold; color: #2c3e50;")
         
         self.search_bar = QLineEdit()
-        self.search_bar.setPlaceholderText("🔍 Buscar empleado por nombre o departamento...")
+        self.search_bar.setPlaceholderText("Buscar empleado por nombre o departamento...")
         self.search_bar.setStyleSheet("padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;")
 
         # 2. Tabla de Empleados
@@ -43,9 +44,14 @@ class EmpleadosView(QWidget):
 
         # 3. Botones de Acción (CRUD)
         layout_botones = QHBoxLayout()
-        self.btn_nuevo = QPushButton("➕ Nuevo Empleado")
-        self.btn_editar = QPushButton("✏️ Editar")
-        self.btn_baja = QPushButton("🔻 Dar de Baja")
+        self.btn_nuevo = QPushButton(" Nuevo Empleado")
+        self.btn_editar = QPushButton(" Editar")
+        self.btn_baja = QPushButton(" Dar de Baja")
+        
+        # Inyectar los íconos de qtawesome
+        self.btn_nuevo.setIcon(qta.icon('fa5s.user-plus', color='white'))
+        self.btn_editar.setIcon(qta.icon('fa5s.edit', color='white'))
+        self.btn_baja.setIcon(qta.icon('fa5s.user-times', color='white'))
         
         estilo_btn = "padding: 10px; font-size: 13px; font-weight: bold; border-radius: 5px;"
         self.btn_nuevo.setStyleSheet(estilo_btn + "background-color: #27ae60; color: white;")
@@ -71,7 +77,7 @@ class EmpleadosView(QWidget):
         layout_der = QVBoxLayout(self.panel_derecho)
         layout_der.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        titulo_resumen = QLabel("📋 Resumen del Empleado")
+        titulo_resumen = QLabel("Resumen del Empleado")
         titulo_resumen.setStyleSheet("font-size: 18px; font-weight: bold; border: none; border-bottom: 2px solid #ccc; padding-bottom: 5px;")
         
         # Etiquetas de información (se llenarán dinámicamente)

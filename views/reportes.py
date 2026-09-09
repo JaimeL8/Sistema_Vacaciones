@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QComboBox, QDateEdit, QPushButton, QFrame, 
                              QTableWidget, QTableWidgetItem, QHeaderView)
 from PyQt6.QtCore import Qt, QDate
+import qtawesome as qta
 
 class ReportesView(QWidget):
     def __init__(self):
@@ -35,15 +36,29 @@ class ReportesView(QWidget):
 
         estilo_combo = "padding: 6px; font-size: 13px; background-color: white; border: 1px solid #ccc; border-radius: 4px;"
 
-        # Tipo de Reporte
-        layout_filtros.addWidget(QLabel("📝 Tipo:"))
+        estilo_combo = "padding: 6px; font-size: 13px; background-color: white; border: 1px solid #ccc; border-radius: 4px;"
+
+        # --- Etiqueta con ícono para "Tipo" ---
+        layout_tit_tipo = QHBoxLayout()
+        ico_tipo = QLabel()
+        ico_tipo.setPixmap(qta.icon('fa5s.file-alt', color='#2c3e50').pixmap(16, 16))
+        layout_tit_tipo.addWidget(ico_tipo)
+        layout_tit_tipo.addWidget(QLabel("Tipo:"))
+        
+        layout_filtros.addLayout(layout_tit_tipo)
         self.combo_tipo = QComboBox()
         self.combo_tipo.addItems(["Reporte de Ausencias", "Reporte de Pasivos Laborales"])
         self.combo_tipo.setStyleSheet(estilo_combo)
         layout_filtros.addWidget(self.combo_tipo)
 
-        # Rango de Tiempo
-        layout_filtros.addWidget(QLabel("⏱️ Rango:"))
+        # --- Etiqueta con ícono para "Rango" ---
+        layout_tit_rango = QHBoxLayout()
+        ico_rango = QLabel()
+        ico_rango.setPixmap(qta.icon('fa5s.clock', color='#2c3e50').pixmap(16, 16))
+        layout_tit_rango.addWidget(ico_rango)
+        layout_tit_rango.addWidget(QLabel("Rango:"))
+        
+        layout_filtros.addLayout(layout_tit_rango)
         self.combo_tiempo = QComboBox()
         self.combo_tiempo.addItems([
             "Próximos 15 días", 
@@ -76,7 +91,8 @@ class ReportesView(QWidget):
         layout_filtros.addWidget(self.date_fin)
 
         # Botón Generar Previsualización
-        self.btn_generar = QPushButton("🔄 Generar")
+        self.btn_generar = QPushButton(" Generar")
+        self.btn_generar.setIcon(qta.icon('fa5s.sync-alt', color='white')) # Ícono de recargar/sincronizar
         self.btn_generar.setStyleSheet("""
             QPushButton { background-color: #2c3e50; color: white; font-weight: bold; padding: 6px 15px; border-radius: 4px; }
             QPushButton:hover { background-color: #34495e; }
@@ -98,13 +114,15 @@ class ReportesView(QWidget):
         # ==========================================
         layout_exportar = QHBoxLayout()
         
-        self.btn_excel = QPushButton("📊 Exportar a Excel")
+        self.btn_excel = QPushButton(" Exportar a Excel")
+        self.btn_excel.setIcon(qta.icon('fa5s.file-excel', color='white'))
         self.btn_excel.setStyleSheet("""
             QPushButton { background-color: #27ae60; color: white; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 5px; }
             QPushButton:hover { background-color: #2ecc71; }
         """)
 
-        self.btn_pdf = QPushButton("📄 Exportar a PDF")
+        self.btn_pdf = QPushButton(" Exportar a PDF")
+        self.btn_pdf.setIcon(qta.icon('fa5s.file-pdf', color='white'))
         self.btn_pdf.setStyleSheet("""
             QPushButton { background-color: #c0392b; color: white; padding: 10px; font-weight: bold; font-size: 14px; border-radius: 5px; }
             QPushButton:hover { background-color: #e74c3c; }

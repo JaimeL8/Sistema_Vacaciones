@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                              QComboBox, QDateEdit, QPushButton, QFrame, 
                              QFormLayout, QCheckBox, QMessageBox, QGridLayout)
 from PyQt6.QtCore import Qt, QDate
+import qtawesome as qta
 
 class VacacionesView(QWidget):
     def __init__(self):
@@ -52,7 +53,7 @@ class VacacionesView(QWidget):
         frame_empleado.setStyleSheet("background-color: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;")
         layout_empleado = QHBoxLayout(frame_empleado)
         
-        lbl_seleccionar = QLabel("👤 Seleccionar Empleado:")
+        lbl_seleccionar = QLabel("Seleccionar Empleado:")
         lbl_seleccionar.setStyleSheet("font-size: 14px; font-weight: bold; border: none;")
         
         self.combo_empleados = QComboBox()
@@ -97,8 +98,8 @@ class VacacionesView(QWidget):
         self.check_un_dia.setStyleSheet("font-size: 13px; font-weight: bold; color: #34495e; border: none;")
         
         layout_fechas.addRow(QLabel(""), self.check_un_dia)
-        layout_fechas.addRow(QLabel("📅 Fecha de Inicio:"), self.date_inicio)
-        layout_fechas.addRow(QLabel("🏁 Fecha de Fin:"), self.date_fin)
+        layout_fechas.addRow(QLabel("Fecha de Inicio:"), self.date_inicio)
+        layout_fechas.addRow(QLabel("Fecha de Fin:"), self.date_fin)
 
         # Eventos de fechas
         self.check_un_dia.toggled.connect(self.toggle_un_dia)
@@ -118,7 +119,8 @@ class VacacionesView(QWidget):
         self.lbl_dias_descontar = QLabel("0")
         self.lbl_dias_descontar.setStyleSheet("font-size: 32px; font-weight: bold; color: #e74c3c; border: none;")
 
-        self.btn_guardar = QPushButton("💾 Guardar Vacaciones")
+        self.btn_guardar = QPushButton(" Guardar Vacaciones")
+        self.btn_guardar.setIcon(qta.icon('fa5s.save', color='white'))
         self.btn_guardar.setStyleSheet("""
             QPushButton {
                 background-color: #2980b9; color: white; padding: 12px 20px; 
