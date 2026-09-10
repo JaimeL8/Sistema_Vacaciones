@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
                              QComboBox, QDateEdit, QPushButton, QFrame, 
-                             QFormLayout, QCheckBox, QMessageBox, QGridLayout)
+                             QFormLayout, QCheckBox, QMessageBox, QGridLayout,
+                             QCompleter,QLineEdit) 
 from PyQt6.QtCore import Qt, QDate
 import qtawesome as qta
 
@@ -59,8 +60,24 @@ class VacacionesView(QWidget):
         self.combo_empleados = QComboBox()
         self.combo_empleados.setStyleSheet("padding: 5px; font-size: 14px; background-color: white; border: 1px solid #ccc; border-radius: 4px;")
         self.combo_empleados.setMinimumWidth(250)
+
+        # --- NUEVO: Convertir en barra de búsqueda con autocompletado ---
+        self.combo_empleados.setEditable(True) # Permite escribir en la caja
+        self.combo_empleados.setInsertPolicy(QComboBox.InsertPolicy.NoInsert) # Evita que guarden nombres inventados
+
         # Mockup de datos (luego vendrán de Supabase)
-        self.combo_empleados.addItems(["-- Seleccione un empleado --", "Juan Pérez López", "Ana García Méndez", "Carlos Ruiz"])
+        self.combo_empleados.lineEdit().setPlaceholderText("Buscar empleado por nombre...")
+        # 2. Agregar SOLO los datos reales (quitamos el "-- Seleccione un empleado --")
+        self.combo_empleados.addItems(["Juan Pérez López", "Ana García Méndez", "Carlos Ruiz"])
+        
+        # 3. Forzar a que el buscador inicie completamente vacío para que se vea el texto fantasma
+        self.combo_empleados.setCurrentIndex(-1)
+
+        # Configurar el motor de búsqueda (QCompleter)
+        completer = self.combo_empleados.completer()
+        completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+        # MatchContains permite que si escribes "García", te encuentre a "Ana García"
+        completer.setFilterMode(Qt.MatchFlag.MatchContains)
         
         self.lbl_saldo = QLabel("Saldo disponible: --")
         self.lbl_saldo.setStyleSheet("font-size: 14px; color: #27ae60; font-weight: bold; border: none; padding-left: 20px;")
@@ -161,9 +178,38 @@ class VacacionesView(QWidget):
         layout_inputs.addLayout(layout_fin)
         layout_inputs.addStretch()
 
+# --- NUEVO: Bloque de Observaciones ---
+        layout_obs = QVBoxLayout()
+        layout_obs.setSpacing(5)
+        
+        lbl_obs = QLabel("Observaciones (Opcional)")
+        lbl_obs.setStyleSheet("font-size: 13px; font-weight: bold; color: #7f8c8d; border: none; margin-top: 10px;")
+        
+        self.input_observaciones = QLineEdit()
+        self.input_observaciones.setPlaceholderText("Ej. Periodo vacacional anual, asuntos personales...")
+        self.input_observaciones.setStyleSheet("""
+            QLineEdit {
+                padding: 10px 15px; 
+                font-size: 14px; 
+                color: #2c3e50;
+                background-color: #f8f9fa;
+                border: 1px solid #ced4da; 
+                border-radius: 6px;
+            }
+            QLineEdit:focus {
+                border: 1px solid #3498db;
+                background-color: white;
+            }
+        """)
+        
+        layout_obs.addWidget(lbl_obs)
+        layout_obs.addWidget(self.input_observaciones)
+        # --------------------------------------
+
         # Agregar todo al marco principal de fechas
         layout_fechas.addLayout(layout_top_fechas)
         layout_fechas.addLayout(layout_inputs)
+        layout_fechas.addLayout(layout_obs) # <--- Agregamos las observaciones al contenedor principal
 
         # Eventos de fechas
         self.check_un_dia.toggled.connect(self.toggle_un_dia)

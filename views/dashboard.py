@@ -47,8 +47,8 @@ class DashboardView(QWidget):
         layout_kpis.setSpacing(15)
 
         self.kpi_activos = self.crear_tarjeta_kpi("Empleados Activos", "45", "#2980b9")
-        self.kpi_vacaciones = self.crear_tarjeta_kpi("De Vacaciones (Esta Semana)", "3", "#8e44ad")
-        self.kpi_alertas = self.crear_tarjeta_kpi("Alertas de Caducidad", "2", "#e74c3c")
+        self.kpi_vacaciones = self.crear_tarjeta_kpi("Empleados de Vacaciones (Esta Semana)", "3", "#8e44ad")
+        self.kpi_alertas = self.crear_tarjeta_kpi("Empleados con vacaciones por caducar", "2", "#e74c3c")
 
         layout_kpis.addWidget(self.kpi_activos, 0, 0)
         layout_kpis.addWidget(self.kpi_vacaciones, 0, 1)

@@ -61,7 +61,7 @@ class ReportesView(QWidget):
         layout_filtros.addLayout(layout_tit_rango)
         self.combo_tiempo = QComboBox()
         self.combo_tiempo.addItems([
-            "Próximos 15 días", 
+            "Quincenal", 
             "Mensual", 
             "Trimestral", 
             "Anual", 
