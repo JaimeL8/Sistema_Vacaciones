@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
                              QLineEdit, QPushButton, QTableWidget, 
-                             QTableWidgetItem, QHeaderView, QFrame, QGridLayout)
+                             QTableWidgetItem, QHeaderView, QFrame, QGridLayout, QComboBox)
 from PyQt6.QtCore import Qt
 import qtawesome as qta
 
@@ -24,9 +24,53 @@ class EmpleadosView(QWidget):
         lbl_titulo = QLabel("Directorio de Empleados")
         lbl_titulo.setStyleSheet("font-size: 20px; font-weight: bold; color: #2c3e50;")
         
+        # --- NUEVO: Contenedor horizontal para Buscador + Filtro ---
+        layout_filtros = QHBoxLayout()
+        layout_filtros.setSpacing(15)
+
         self.search_bar = QLineEdit()
-        self.search_bar.setPlaceholderText("Buscar empleado por nombre o departamento...")
-        self.search_bar.setStyleSheet("padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;")
+        self.search_bar.setPlaceholderText("Buscar empleado por nombre...")
+        self.search_bar.setStyleSheet("""
+            QLineEdit {
+                padding: 10px 15px; 
+                font-size: 14px; 
+                color: #2c3e50;
+                background-color: white;
+                border: 1px solid #ced4da; 
+                border-radius: 6px;
+            }
+            QLineEdit:focus {
+                border: 1px solid #3498db;
+            }
+        """)
+
+        self.combo_filtro_depto = QComboBox()
+        self.combo_filtro_depto.addItems([
+            "Todos los departamentos", 
+            "Recursos Humanos", 
+            "Ventas", 
+            "TI",
+            "Finanzas",
+            "Operaciones"
+        ])
+        self.combo_filtro_depto.setStyleSheet("""
+            QComboBox {
+                padding: 10px 15px; 
+                font-size: 14px; 
+                color: #2c3e50;
+                background-color: #f8f9fa;
+                border: 1px solid #ced4da; 
+                border-radius: 6px;
+            }
+            QComboBox:focus {
+                border: 1px solid #3498db;
+                background-color: white;
+            }
+        """)
+        
+        layout_filtros.addWidget(self.search_bar, stretch=2)
+        layout_filtros.addWidget(self.combo_filtro_depto, stretch=1)
+        # -----------------------------------------------------------
 
         estilo_tabla = """
             QTableWidget {
@@ -90,7 +134,7 @@ class EmpleadosView(QWidget):
 
         # Armar panel izquierdo
         layout_izq.addWidget(lbl_titulo)
-        layout_izq.addWidget(self.search_bar)
+        layout_izq.addLayout(layout_filtros)
         layout_izq.addWidget(self.tabla_empleados)
         layout_izq.addLayout(layout_botones)
 

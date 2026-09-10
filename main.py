@@ -12,6 +12,7 @@ from views.vacaciones import VacacionesView
 from views.historial import HistorialView
 from views.reportes import ReportesView
 from views.configuracion import ConfiguracionView
+from views.antiguedad import AntiguedadView
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -52,6 +53,7 @@ class MainWindow(QMainWindow):
         self.btn_historial = QPushButton(" Historial y Expediente")
         self.btn_reportes = QPushButton(" Reportes")
         self.btn_config = QPushButton(" Configuración")
+        self.btn_antiguedad = QPushButton("Años por antigüedad")
         
         # --- ASIGNACIÓN DE ÍCONOS VECTORIALES ---
         # Usamos íconos blancos de la colección FontAwesome 5 Solid (fa5s)
@@ -61,13 +63,14 @@ class MainWindow(QMainWindow):
         self.btn_historial.setIcon(qta.icon('fa5s.folder-open', color='white'))
         self.btn_reportes.setIcon(qta.icon('fa5s.chart-line', color='white'))
         self.btn_config.setIcon(qta.icon('fa5s.cog', color='white'))
+        self.btn_antiguedad.setIcon(qta.icon('fa5s.calendar', color='white'))
 
         botones = [self.btn_dashboard, self.btn_empleados, self.btn_vacaciones, 
-                   self.btn_historial, self.btn_reportes, self.btn_config]
+                   self.btn_historial, self.btn_reportes, self.btn_config, self.btn_antiguedad]
         
         for btn in botones:
             btn.setStyleSheet(estilo_btn)
-            btn.setIconSize(QSize(20, 20)) # Hacemos los íconos un poco más grandes
+            btn.setIconSize(QSize(20, 20)) # Tamaño de los íconos un poco más grandes
             sidebar.addWidget(btn)
             
         sidebar.addStretch()
@@ -83,6 +86,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(HistorialView())      # Índice 3
         self.stacked_widget.addWidget(ReportesView())       # Índice 4
         self.stacked_widget.addWidget(ConfiguracionView())  # Índice 5
+        self.stacked_widget.addWidget(AntiguedadView())     # Índice 6
 
         self.btn_dashboard.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(0))
         self.btn_empleados.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(1))
@@ -90,6 +94,7 @@ class MainWindow(QMainWindow):
         self.btn_historial.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(3))
         self.btn_reportes.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(4))
         self.btn_config.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(5))
+        self.btn_antiguedad.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(6))
 
         self.vista_dashboard.btn_acceso_rapido.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(2))
         

@@ -67,7 +67,7 @@ class VacacionesView(QWidget):
 
         # Mockup de datos (luego vendrán de Supabase)
         self.combo_empleados.lineEdit().setPlaceholderText("Buscar empleado por nombre...")
-        # 2. Agregar SOLO los datos reales (quitamos el "-- Seleccione un empleado --")
+        # 2. Agregar SOLO los datos reales 
         self.combo_empleados.addItems(["Juan Pérez López", "Ana García Méndez", "Carlos Ruiz"])
         
         # 3. Forzar a que el buscador inicie completamente vacío para que se vea el texto fantasma
@@ -209,7 +209,7 @@ class VacacionesView(QWidget):
         # Agregar todo al marco principal de fechas
         layout_fechas.addLayout(layout_top_fechas)
         layout_fechas.addLayout(layout_inputs)
-        layout_fechas.addLayout(layout_obs) # <--- Agregamos las observaciones al contenedor principal
+        layout_fechas.addLayout(layout_obs) # <--- Se agregan las observaciones al contenedor principal
 
         # Eventos de fechas
         self.check_un_dia.toggled.connect(self.toggle_un_dia)
@@ -261,7 +261,7 @@ class VacacionesView(QWidget):
             self.lbl_saldo.setText("Saldo disponible: --")
             return
             
-        # MOCKUP: Simulamos que todos tienen 12 días por ahora
+        # MOCKUP: Se simula que todos tienen 12 días por ahora
         self.lbl_saldo.setText("Saldo disponible: 12 días")
 
     def toggle_un_dia(self, checked):
