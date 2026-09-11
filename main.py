@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         sidebar_frame.setFixedWidth(220)
         sidebar = QVBoxLayout(sidebar_frame)
         
-        # Ajustamos el estilo para dar espacio entre el ícono y el texto
+        # Se ajusta el estilo para dar espacio entre el ícono y el texto
         estilo_btn = """
             QPushButton {
                 background-color: transparent;
@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         self.btn_antiguedad = QPushButton("Años por antigüedad")
         
         # --- ASIGNACIÓN DE ÍCONOS VECTORIALES ---
-        # Usamos íconos blancos de la colección FontAwesome 5 Solid (fa5s)
+        # Se usan los íconos blancos de la colección FontAwesome 5 Solid (fa5s)
         self.btn_dashboard.setIcon(qta.icon('fa5s.chart-bar', color='white'))
         self.btn_empleados.setIcon(qta.icon('fa5s.users', color='white'))
         self.btn_vacaciones.setIcon(qta.icon('fa5s.umbrella-beach', color='white'))

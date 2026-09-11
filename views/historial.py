@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
                              QComboBox, QTableWidget, QTableWidgetItem, 
-                             QHeaderView, QFrame)
+                             QHeaderView, QFrame, QCompleter, QPushButton, QMessageBox)
 from PyQt6.QtCore import Qt
 import qtawesome as qta
 
@@ -42,13 +42,32 @@ class HistorialView(QWidget):
         self.combo_empleados = QComboBox()
         self.combo_empleados.setStyleSheet("padding: 5px; font-size: 14px; background-color: white; border: 1px solid #ccc; border-radius: 4px;")
         self.combo_empleados.setMinimumWidth(350)
-        # Mockup de datos (posteriormente se poblará dinámicamente desde Supabase)
+        
+        # --- NUEVO: Convertir en barra de búsqueda con autocompletado ---
+        self.combo_empleados.setEditable(True)
+        self.combo_empleados.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        self.combo_empleados.lineEdit().setPlaceholderText("Buscar empleado por nombre...")
+        
+        # Agregamos SOLO los datos reales (quitamos el texto de "-- Seleccione --")
         self.combo_empleados.addItems([
-            "-- Seleccione un empleado para ver su expediente --", 
             "Juan Pérez López", 
             "Ana García Méndez", 
-            "Carlos Ruiz"
+            "Miguel Torres Esparza",
+            "Isabel Martínez Rodríguez",
+            "Marcos Moreno Flores",
+            "Rachel Monyañez Alegría",
+            "Pablo Ruiz Marmolejo",
+            "Lizbeth Andrade Olivo"
         ])
+        
+        # Forzar a que inicie vacío para que se vea el texto fantasma
+        self.combo_empleados.setCurrentIndex(-1)
+        
+        # Configurar el motor de búsqueda (QCompleter)
+        completer = self.combo_empleados.completer()
+        completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+        completer.setFilterMode(Qt.MatchFlag.MatchContains)
+        # -----------------------------------------------------------------
         
         layout_selector.addLayout(layout_lbl_empleado)
         layout_selector.addWidget(self.combo_empleados)
@@ -113,12 +132,50 @@ class HistorialView(QWidget):
 
         # --- NUEVAS LÍNEAS DE DISEÑO APLICADAS ---
         self.tabla_historial.setStyleSheet(estilo_tabla)
-        self.tabla_historial.verticalHeader().setVisible(False) # Oculta la columna de números
-        self.tabla_historial.setAlternatingRowColors(True) # Filas tipo cebra
+        self.tabla_historial.verticalHeader().setVisible(False)
+        self.tabla_historial.setAlternatingRowColors(True)
         # -----------------------------------------
 
+        # --- NUEVO: Botones de Acción para el Historial ---
+        layout_acciones = QHBoxLayout()
+        layout_acciones.addStretch() # Empuja los botones a la derecha
+
+        self.btn_editar = QPushButton(" Modificar Fechas")
+        self.btn_editar.setIcon(qta.icon('fa5s.edit', color='white'))
+        self.btn_editar.setStyleSheet("""
+            QPushButton {
+                background-color: #f39c12; color: white; padding: 10px 20px; 
+                font-size: 13px; font-weight: bold; border-radius: 5px;
+            }
+            QPushButton:hover { background-color: #e67e22; }
+            QPushButton:disabled { background-color: #bdc3c7; }
+        """)
+
+        self.btn_eliminar = QPushButton(" Cancelar Vacación")
+        self.btn_eliminar.setIcon(qta.icon('fa5s.trash-alt', color='white'))
+        self.btn_eliminar.setStyleSheet("""
+            QPushButton {
+                background-color: #e74c3c; color: white; padding: 10px 20px; 
+                font-size: 13px; font-weight: bold; border-radius: 5px;
+            }
+            QPushButton:hover { background-color: #c0392b; }
+            QPushButton:disabled { background-color: #bdc3c7; }
+        """)
+
+        # Los botones inician desactivados hasta que seleccionen una fila
+        self.btn_editar.setEnabled(False)
+        self.btn_eliminar.setEnabled(False)
+
+        layout_acciones.addWidget(self.btn_editar)
+        layout_acciones.addWidget(self.btn_eliminar)
+        
+        # Conectar el clic en la tabla para activar los botones
+        self.tabla_historial.itemSelectionChanged.connect(self.activar_botones_accion)
+
+        # Armar el contenedor de la bitácora
         layout_bitacora.addWidget(self.lbl_info_empleado)
         layout_bitacora.addWidget(self.tabla_historial)
+        layout_bitacora.addLayout(layout_acciones) # <--- Agregamos los botones aquí
 
         # Agregar todo al layout principal
         layout_principal.addWidget(frame_selector)
@@ -129,14 +186,21 @@ class HistorialView(QWidget):
     def cargar_historial_empleado(self):
         """Carga los bloques históricos de vacaciones vinculados al empleado"""
         index = self.combo_empleados.currentIndex()
-        if index == 0:
+        if index == -1: # <--- Ahora verifica si está vacío
             self.lbl_info_empleado.setText("Seleccione un empleado arriba para consultar su expediente histórico completo.")
             self.tabla_historial.setRowCount(0)
             return
 
-        nombre = self.combo_historial_nombre = self.combo_empleados.currentText()
-        self.lbl_info_empleado.setText(f"Expediente Histórico de: {nombre} | Fecha de Ingreso: 15/03/2022")
-
+        nombre = self.combo_empleados.currentText()
+        
+        # Se simula el estatus (luego Supabase nos dará este dato real)
+        # Por ejemplo: se hace que Carlos Ruiz aparezca como "Inactivo" basándonos en tu diseño anterior
+        estatus = "Inactivo" if nombre == "Carlos Ruiz" else "Activo"
+        
+        # Se actualiza el encabezado de la tabla para incluir el estatus
+        self.lbl_info_empleado.setText(
+            f"Expediente Histórico de: {nombre} | Fecha de Ingreso: 15/03/2022 | Estatus: {estatus}"
+        )
         # Mockup de datos que simulan registros de la tabla 'vacaciones' (incluyendo el 'periodo_anual')
         # Formato: (Periodo LFT, Inicio, Fin, Días, Registro, Observaciones)
         datos_mock = [
@@ -152,3 +216,9 @@ class HistorialView(QWidget):
                 item = QTableWidgetItem(texto)
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter if columna < 5 else Qt.AlignmentFlag.AlignLeft)
                 self.tabla_historial.setItem(fila, columna, item)
+
+    def activar_botones_accion(self):
+        """Activa los botones de editar/eliminar solo si hay una fila seleccionada"""
+        hay_seleccion = len(self.tabla_historial.selectedItems()) > 0
+        self.btn_editar.setEnabled(hay_seleccion)
+        self.btn_eliminar.setEnabled(hay_seleccion)

@@ -114,39 +114,56 @@ class AntiguedadView(QWidget):
         # Cargar los 10 registros de prueba
         self.cargar_datos_prueba()
     def cargar_datos_prueba(self):
-        """Carga 10 empleados mock calculando la antigüedad en tiempo real"""
+        """Carga 10 empleados mock calculando la antigüedad y ordenándolos de mayor a menor"""
         # Formato de prueba: (Nombre, Año, Mes, Día)
         datos = [
             ("Juan Pérez López", QDate(2015, 3, 10)),     # Más de 11 años
             ("Ana García Méndez", QDate(2026, 8, 15)),    # Menos de 1 año (aparecerá vacío)
             ("Carlos Ruiz", QDate(2020, 11, 20)),         # 5 años
             ("María Fernández", QDate(2010, 1, 5)),       # Más de 16 años
-            ("Luis Sánchez", QDate(2026, 2, 28)),         # Menos de 1 año (aparecerá vacío)
+            ("Luis Sánchez", QDate(2026, 2, 28)),         # Menos de 1 año
             ("Elena Gómez", QDate(2021, 7, 12)),          # 5 años
             ("Jorge Ramírez", QDate(2019, 9, 25)),        # 6 años
             ("Sofía Castro", QDate(2023, 4, 18)),         # 3 años
             ("Miguel Torres", QDate(2024, 10, 5)),        # 1 año
-            ("Lucía Morales", QDate(2026, 9, 1))          # Menos de 1 año (aparecerá vacío)
+            ("Lucía Morales", QDate(2026, 9, 1))          # Menos de 1 año
         ]
 
-        self.tabla_antiguedad.setRowCount(len(datos))
         fecha_actual = QDate.currentDate()
         
-        for fila, (nombre, fecha_ingreso) in enumerate(datos):
-            # Lógica matemática precisa para calcular años cumplidos
+        # 1. Pre-calcular la antigüedad de todos ANTES de pasarlos a la tabla
+        datos_calculados = []
+        for nombre, fecha_ingreso in datos:
+            # Cálculo de años exactos
             anios_exactos = fecha_actual.year() - fecha_ingreso.year()
-            
-            # Se resta un año si aún no pasa la fecha de su aniversario este año
             if (fecha_ingreso.month() > fecha_actual.month() or 
                (fecha_ingreso.month() == fecha_actual.month() and fecha_ingreso.day() > fecha_actual.day())):
                 anios_exactos -= 1
                 
-            # Regla solicitada: Si es menor a 1 año, se deja el campo vacío
-            texto_antiguedad = f"{anios_exactos} años" if anios_exactos >= 1 else ""
+            # Días totales desde que ingresó (usado para un ordenamiento perfecto)
+            dias_totales = fecha_ingreso.daysTo(fecha_actual)
+            
+            # Guardamos un diccionario con toda su info
+            datos_calculados.append({
+                'nombre': nombre,
+                'fecha_ingreso': fecha_ingreso,
+                'anios': anios_exactos,
+                'dias_totales': dias_totales
+            })
+
+        # 2. ORDENAR LA LISTA: Usamos los 'dias_totales' de mayor a menor (reverse=True)
+        datos_calculados.sort(key=lambda empleado: empleado['dias_totales'], reverse=True)
+
+        # 3. Ahora sí, construimos la tabla con los datos ya ordenados
+        self.tabla_antiguedad.setRowCount(len(datos_calculados))
+        
+        for fila, emp in enumerate(datos_calculados):
+            # Regla solicitada: Si es menor a 1 año, dejamos el campo vacío
+            texto_antiguedad = f"{emp['anios']} años" if emp['anios'] >= 1 else ""
 
             # Crear celdas
-            item_nombre = QTableWidgetItem(nombre)
-            item_ingreso = QTableWidgetItem(fecha_ingreso.toString("dd/MM/yyyy"))
+            item_nombre = QTableWidgetItem(emp['nombre'])
+            item_ingreso = QTableWidgetItem(emp['fecha_ingreso'].toString("dd/MM/yyyy"))
             item_antiguedad = QTableWidgetItem(texto_antiguedad)
             
             # Centrar el texto de las columnas de fechas y años
