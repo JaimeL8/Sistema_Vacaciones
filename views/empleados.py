@@ -98,7 +98,7 @@ class EmpleadosView(QWidget):
         self.tabla_empleados = QTableWidget()
         self.tabla_empleados.setColumnCount(3)
         self.tabla_empleados.setHorizontalHeaderLabels(["Nombre Completo", "Departamento", "Estatus"])
-        # Hacer que la tabla ocupe todo el espacio disponible
+        # Se hace que la tabla ocupe todo el espacio disponible
         self.tabla_empleados.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.tabla_empleados.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         self.tabla_empleados.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
@@ -106,10 +106,10 @@ class EmpleadosView(QWidget):
         self.tabla_empleados.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers) # Solo lectura
 
         self.tabla_empleados.setStyleSheet(estilo_tabla)
-        self.tabla_empleados.verticalHeader().setVisible(False) # Oculta la columna de números
-        self.tabla_empleados.setAlternatingRowColors(True) # Activa el diseño de filas "cebra"
+        self.tabla_empleados.verticalHeader().setVisible(False) # Se oculta la columna de números
+        self.tabla_empleados.setAlternatingRowColors(True) # Se activa el diseño de filas "cebra"
 
-        # Conectar el clic en la tabla a la función de resumen
+        # Se conecta el clic en la tabla a la función de resumen
         self.tabla_empleados.itemSelectionChanged.connect(self.mostrar_resumen_empleado)
 
         # 3. Botones de Acción (CRUD)
@@ -118,7 +118,7 @@ class EmpleadosView(QWidget):
         self.btn_editar = QPushButton(" Editar")
         self.btn_baja = QPushButton(" Dar de Baja")
         
-        # Inyectar los íconos de qtawesome
+        # Aquí se inyectan los íconos de qtawesome
         self.btn_nuevo.setIcon(qta.icon('fa5s.user-plus', color='white'))
         self.btn_editar.setIcon(qta.icon('fa5s.edit', color='white'))
         self.btn_baja.setIcon(qta.icon('fa5s.user-times', color='white'))
@@ -132,7 +132,7 @@ class EmpleadosView(QWidget):
         layout_botones.addWidget(self.btn_editar)
         layout_botones.addWidget(self.btn_baja)
 
-        # Armar panel izquierdo
+        # Se arma el panel izquierdo
         layout_izq.addWidget(lbl_titulo)
         layout_izq.addLayout(layout_filtros)
         layout_izq.addWidget(self.tabla_empleados)
@@ -163,18 +163,18 @@ class EmpleadosView(QWidget):
         self.lbl_antiguedad = QLabel("Antigüedad: -")
         self.lbl_antiguedad.setStyleSheet(estilo_lbl_datos)
 
-        # Tarjetas de Estadísticas de Vacaciones
+        # Conjunto de tarjetas de Estadísticas de Vacaciones
         layout_stats = QGridLayout()
         
-        # Tarjeta 1: Días por Ley
+        # Tarjeta 1: Para mostrar lod días por Ley
         self.caja_dias_ley = self.crear_tarjeta_stat("Días por Ley", "0", "#34495e")
-        # Tarjeta 2: Días Disponibles (La más importante)
+        # Tarjeta 2: Para mostrar los días Disponibles (La más importante)
         self.caja_dias_disp = self.crear_tarjeta_stat("Días Disponibles", "0", "#27ae60")
 
         layout_stats.addWidget(self.caja_dias_ley, 0, 0)
         layout_stats.addWidget(self.caja_dias_disp, 0, 1)
 
-        # Armar panel derecho
+        # Se arma el panel derecho
         layout_der.addWidget(titulo_resumen)
         layout_der.addWidget(self.lbl_nombre)
         layout_der.addWidget(self.lbl_depto)
@@ -183,11 +183,11 @@ class EmpleadosView(QWidget):
         layout_der.addSpacing(20)
         layout_der.addLayout(layout_stats)
 
-        # Agregar paneles al layout principal
+        # Aquí se agregan los paneles al layout principal
         layout_principal.addWidget(panel_izquierdo)
         layout_principal.addWidget(self.panel_derecho)
 
-        # Cargar datos de prueba (MOCK)
+        # Aquí se cargan los datos de prueba (MOCK)
         self.cargar_datos_prueba()
 
     def crear_tarjeta_stat(self, titulo, valor, color):
@@ -230,7 +230,7 @@ class EmpleadosView(QWidget):
         if not filas_seleccionadas:
             return
             
-        # Obtener datos de la fila seleccionada
+        # Se obtienen los datos de la fila seleccionada
         fila = filas_seleccionadas[0].row()
         nombre = self.tabla_empleados.item(fila, 0).text()
         depto = self.tabla_empleados.item(fila, 1).text()

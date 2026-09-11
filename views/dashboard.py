@@ -108,7 +108,7 @@ class DashboardView(QWidget):
         self.tabla_ausencias.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
         self.tabla_ausencias.setStyleSheet(estilo_tabla)
-        self.tabla_ausencias.verticalHeader().setVisible(False) # Para ocultar los número 1, 2, 3, ...
+        self.tabla_ausencias.verticalHeader().setVisible(False) # Esto es para ocultar los número 1, 2, 3, ...
         self.tabla_ausencias.setAlternatingRowColors(True) # Filas cebra
 
         layout_ausencias.addWidget(lbl_ausencias)

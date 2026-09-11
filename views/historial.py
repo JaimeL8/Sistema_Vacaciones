@@ -29,7 +29,7 @@ class HistorialView(QWidget):
         layout_lbl_empleado.setSpacing(5)
         
         lbl_icono = QLabel()
-        # Convertimos el ícono vectorial en una imagen de 18x18 píxeles
+        # Se convierte el ícono vectorial en una imagen de 18x18 píxeles
         lbl_icono.setPixmap(qta.icon('fa5s.user', color='#2c3e50').pixmap(18, 18))
         lbl_icono.setStyleSheet("border: none;")
         
@@ -48,7 +48,7 @@ class HistorialView(QWidget):
         self.combo_empleados.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
         self.combo_empleados.lineEdit().setPlaceholderText("Buscar empleado por nombre...")
         
-        # Agregamos SOLO los datos reales (quitamos el texto de "-- Seleccione --")
+        # Se agregan SOLO los datos reales (quitamos el texto de "-- Seleccione --")
         self.combo_empleados.addItems([
             "Juan Pérez López", 
             "Ana García Méndez", 
@@ -60,7 +60,7 @@ class HistorialView(QWidget):
             "Lizbeth Andrade Olivo"
         ])
         
-        # Forzar a que inicie vacío para que se vea el texto fantasma
+        # Se fuerza a que inicie vacío para que se vea el texto fantasma
         self.combo_empleados.setCurrentIndex(-1)
         
         # Configurar el motor de búsqueda (QCompleter)
@@ -73,7 +73,7 @@ class HistorialView(QWidget):
         layout_selector.addWidget(self.combo_empleados)
         layout_selector.addStretch()
 
-        # Conectar evento de selección
+        # Se conecta el evento de selección
         self.combo_empleados.currentIndexChanged.connect(self.cargar_historial_empleado)
 
         # ==========================================
@@ -162,22 +162,22 @@ class HistorialView(QWidget):
             QPushButton:disabled { background-color: #bdc3c7; }
         """)
 
-        # Los botones inician desactivados hasta que seleccionen una fila
+        # Los botones se inician desactivados hasta que seleccionen una fila
         self.btn_editar.setEnabled(False)
         self.btn_eliminar.setEnabled(False)
 
         layout_acciones.addWidget(self.btn_editar)
         layout_acciones.addWidget(self.btn_eliminar)
         
-        # Conectar el clic en la tabla para activar los botones
+        # Se concta el clic en la tabla para activar los botones
         self.tabla_historial.itemSelectionChanged.connect(self.activar_botones_accion)
 
-        # Armar el contenedor de la bitácora
+        # Se arma el contenedor de la bitácora
         layout_bitacora.addWidget(self.lbl_info_empleado)
         layout_bitacora.addWidget(self.tabla_historial)
-        layout_bitacora.addLayout(layout_acciones) # <--- Agregamos los botones aquí
+        layout_bitacora.addLayout(layout_acciones) # <--- Para agregar los botones de exportar
 
-        # Agregar todo al layout principal
+        # Se agrega todo al layout principal
         layout_principal.addWidget(frame_selector)
         layout_principal.addWidget(frame_bitacora)
 
@@ -186,7 +186,7 @@ class HistorialView(QWidget):
     def cargar_historial_empleado(self):
         """Carga los bloques históricos de vacaciones vinculados al empleado"""
         index = self.combo_empleados.currentIndex()
-        if index == -1: # <--- Ahora verifica si está vacío
+        if index == -1: # <--- Aquí se verifica si esta vacio
             self.lbl_info_empleado.setText("Seleccione un empleado arriba para consultar su expediente histórico completo.")
             self.tabla_historial.setRowCount(0)
             return

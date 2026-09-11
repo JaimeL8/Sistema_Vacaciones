@@ -1,9 +1,10 @@
 import sys
-import qtawesome as qta  # <-- Importamos la librería de íconos
+import qtawesome as qta  # <-- Esta es para importar y poder usar los iconos de iconsawesome
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, 
                              QHBoxLayout, QVBoxLayout, QPushButton, 
                              QStackedWidget, QFrame)
-from PyQt6.QtCore import QSize # <-- Necesario para cambiar el tamaño del ícono
+
+from PyQt6.QtCore import QSize # <-- Esta sirve para cambiar el tamaño del ícono
 
 # Importar las 6 vistas
 from views.dashboard import DashboardView
@@ -46,7 +47,7 @@ class MainWindow(QMainWindow):
             }
         """
 
-        # Creación de los 6 botones (Sin emojis en el texto)
+        # Se crean los 6 botones (Sin emojis en el texto)
         self.btn_dashboard = QPushButton(" Panel Principal")
         self.btn_empleados = QPushButton(" Gestión de Empleados")
         self.btn_vacaciones = QPushButton(" Asignar Vacaciones")
@@ -57,7 +58,7 @@ class MainWindow(QMainWindow):
         
         # --- ASIGNACIÓN DE ÍCONOS VECTORIALES ---
         # Se usan los íconos blancos de la colección FontAwesome 5 Solid (fa5s)
-        self.btn_dashboard.setIcon(qta.icon('fa5s.chart-bar', color='white'))
+        self.btn_dashboard.setIcon(qta.icon('fa5s.home', color='white'))
         self.btn_empleados.setIcon(qta.icon('fa5s.users', color='white'))
         self.btn_vacaciones.setIcon(qta.icon('fa5s.umbrella-beach', color='white'))
         self.btn_historial.setIcon(qta.icon('fa5s.folder-open', color='white'))

@@ -61,7 +61,7 @@ class VacacionesView(QWidget):
         self.combo_empleados.setStyleSheet("padding: 5px; font-size: 14px; background-color: white; border: 1px solid #ccc; border-radius: 4px;")
         self.combo_empleados.setMinimumWidth(250)
 
-        # --- NUEVO: Convertir en barra de búsqueda con autocompletado ---
+        # --- Esto es para convertir en barra de búsqueda con autocompletado ---
         self.combo_empleados.setEditable(True) # Permite escribir en la caja
         self.combo_empleados.setInsertPolicy(QComboBox.InsertPolicy.NoInsert) # Evita que guarden nombres inventados
 
@@ -173,12 +173,12 @@ class VacacionesView(QWidget):
         layout_fin.addWidget(lbl_fin)
         layout_fin.addWidget(self.date_fin)
 
-        # Ensamblar los campos lado a lado
+        # Para ensamblar los campos de lado a lado
         layout_inputs.addLayout(layout_inicio)
         layout_inputs.addLayout(layout_fin)
         layout_inputs.addStretch()
 
-# --- NUEVO: Bloque de Observaciones ---
+        # --- NUEVO: Bloque de Observaciones ---
         layout_obs = QVBoxLayout()
         layout_obs.setSpacing(5)
         

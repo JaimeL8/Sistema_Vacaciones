@@ -154,7 +154,7 @@ class AntiguedadView(QWidget):
         # 2. ORDENAR LA LISTA: Usamos los 'dias_totales' de mayor a menor (reverse=True)
         datos_calculados.sort(key=lambda empleado: empleado['dias_totales'], reverse=True)
 
-        # 3. Ahora sí, construimos la tabla con los datos ya ordenados
+        # 3. Se construye la tabla ordenada de mayor a menor (años de antiguedad)
         self.tabla_antiguedad.setRowCount(len(datos_calculados))
         
         for fila, emp in enumerate(datos_calculados):

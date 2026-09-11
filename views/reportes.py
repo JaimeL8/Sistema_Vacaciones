@@ -134,8 +134,8 @@ class ReportesView(QWidget):
         self.tabla_preview.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
         self.tabla_preview.setStyleSheet(estilo_tabla)
-        self.tabla_preview.verticalHeader().setVisible(False) # Oculta la columna de números
-        self.tabla_preview.setAlternatingRowColors(True) # Activa las filas tipo cebra
+        self.tabla_preview.verticalHeader().setVisible(False) # Esto es para ocultar la columna de números
+        self.tabla_preview.setAlternatingRowColors(True) # Esto es para activar las filas tipo cebra
 
         # ==========================================
         # SECCIÓN 3: Exportación
@@ -161,12 +161,12 @@ class ReportesView(QWidget):
         layout_exportar.addWidget(self.btn_excel)
         layout_exportar.addWidget(self.btn_pdf)
 
-        # Armado final del layout principal
+        # Aquí se hace el armado final del layout principal
         layout_principal.addWidget(frame_filtros)
         layout_principal.addWidget(self.tabla_preview)
         layout_principal.addLayout(layout_exportar)
 
-        # Conectar eventos
+        # Se conectan los eventos
         self.combo_tiempo.currentIndexChanged.connect(self.toggle_fechas_personalizadas)
         self.btn_generar.clicked.connect(self.cargar_preview)
 
